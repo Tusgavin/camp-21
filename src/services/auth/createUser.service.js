@@ -1,8 +1,23 @@
-const { encryptor } = require("../../helpers");
+const { StatusCodes } = require("http-status-codes");
+
+const { encryptor, messages } = require("../../helpers");
 const { usersRepository } = require("../../repositories");
 
 module.exports.createUser = async (name, email, password) => {
+   // Checa se email está sendo usado
+   const userWithEmail = await usersRepository.get({ email });
+   
+   if (userWithEmail) {
+      throw {
+         status: StatusCodes.CONFLICT,
+         message: messages.alreadyExists("email"),
+      };
+   }
+
+   // Cria hash da senha
    const encryptedPassword = await encryptor.hashPassword(password);
+
+   // Salva usuário
    const newUserParams = {
       name,
       email,
@@ -11,14 +26,6 @@ module.exports.createUser = async (name, email, password) => {
    };
 
    const user = await usersRepository.create(newUserParams);
-
-   // const payload = {
-   //    id: user.id,
-   //    email: user.email,
-   // };
-
-   // const sign = promisify(jwt.sign);
-   // const token = await sign(payload, constants.jwtToken);
 
    return { message: "User created with success", user };
 };
