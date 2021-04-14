@@ -1,6 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
 
-const { encryptor, messages } = require("../../helpers");
+const { messages } = require("../../helpers");
 const { usersRepository } = require("../../repositories");
 
 module.exports.createUser = async (name, email, password) => {
@@ -14,14 +14,11 @@ module.exports.createUser = async (name, email, password) => {
       };
    }
 
-   // Cria hash da senha
-   const encryptedPassword = await encryptor.hashPassword(password);
-
    // Salva usuário
    const newUserParams = {
       name,
       email,
-      password: encryptedPassword,
+      password,
       isAdmin: false
    };
 
