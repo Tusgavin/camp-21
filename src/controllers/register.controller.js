@@ -1,11 +1,12 @@
 const { StatusCodes } = require("http-status-codes");
-const { authService } = require("../services");
+const { registerService } = require("../services");
 const yup = require("yup");
 
 module.exports = {
-  signin: async (req, res) => {
+  createUser: async (req, res) => {
     try {
       const schema = yup.object().shape({
+        name: yup.string().required(),
         email: yup.string().required().email(),
         password: yup.string().required(),
       });
@@ -14,8 +15,8 @@ module.exports = {
         stripUnknown: true,
       });
 
-      const { email, password } = req.body;
-      const response = await authService.signin(email, password);
+      const { name, email, password } = req.body;
+      const response = await registerService.createUser(name, email, password);
       return res.status(StatusCodes.OK).json(response);
     } catch (error) {
       console.error(error);
