@@ -6,11 +6,19 @@ const { usersRepository } = require("../../repositories");
 module.exports.createUser = async (name, email, password) => {
    // Checa se email está sendo usado
    const userWithEmail = await usersRepository.get({ email });
-   
    if (userWithEmail) {
       throw {
          status: StatusCodes.CONFLICT,
          message: messages.alreadyExists("email"),
+      };
+   }
+
+   // Checa se nome está sendo usado
+   const userWithName = await usersRepository.get({ name });
+   if (userWithName) {
+      throw {
+         status: StatusCodes.CONFLICT,
+         message: messages.alreadyExists("name"),
       };
    }
 

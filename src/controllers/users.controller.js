@@ -1,10 +1,12 @@
 const { StatusCodes } = require("http-status-codes");
+const { messages } = require("../helpers");
 const { usersService } = require("../services");
 
 module.exports = {
   list: async (req, res) => {
     try {
       const { name } = req.query;
+
       const response = await usersService.list({ name });
 
       if (!response || response.data.length === 0) {
@@ -19,12 +21,20 @@ module.exports = {
         .json(error.messages);
     }
   },
+
   edit: async (req, res) => {
     try {
-      const { name, password, email, is_admin } = req.body;
-      const response = await usersService.edit({ name, password, email, is_admin });
+      // Checa se name é passado nos parametros
+      const { id } = req.query;
+      if (id === undefined) {
+        return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(messages.missingParams);
+      }
 
-      if (!response || response.data.length === 0) {
+      const { name, email, password } = req.body;
+
+      const response = await usersService.edit(id, { name, email, password });
+
+      if (!response) {
         return res.status(StatusCodes.NO_CONTENT).end();
       }
 

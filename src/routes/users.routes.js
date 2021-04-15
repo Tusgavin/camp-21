@@ -5,4 +5,6 @@ const { isAuthorized } = require("../middlewares");
 router.use(isAuthorized);
 
 router.get("/", usersController.list);
+router.patch("/", usersController.edit);
+
 module.exports.users = router;
