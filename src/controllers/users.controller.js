@@ -1,5 +1,4 @@
 const { StatusCodes } = require("http-status-codes");
-const { messages } = require("../helpers");
 const { usersService } = require("../services");
 
 module.exports = {
@@ -40,7 +39,15 @@ module.exports = {
 
   delete: async (req, res) => {
     try {
+      const { password } = req.body;
 
+      const response = await usersService.del(password, req.user);
+
+      if (!response) {
+        return res.status(StatusCodes.NO_CONTENT).end();
+      }
+
+      return res.status(StatusCodes.OK).json(response);
     } catch (error) {
       return res.status(error.status || StatusCodes.INTERNAL_SERVER_ERROR).json(error.message)
     }
