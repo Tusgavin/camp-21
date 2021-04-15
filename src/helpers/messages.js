@@ -7,5 +7,6 @@ module.exports.messages = {
   invalidAuthFormat: `invalid-authorization-format`,
   authMissing: `missing-authorization-header`,
   internalError: "internal-server-error",
-  missingParams: "missing-params"
+  missingParams: "missing-params",
+  permissionDenied: "permission-denied"
 };

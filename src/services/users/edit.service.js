@@ -2,19 +2,18 @@ const { StatusCodes } = require("http-status-codes");
 const { usersRepository } = require("../../repositories");
 const { messages } = require("../../helpers");
 
-module.exports.edit = async (id, options) => {
+module.exports.edit = async (options, callingUser) => {
    console.log(options);
-
+   
    Object.keys(options).forEach(key => options[key] === undefined ? delete options[key] : {});
-
    if (Object.keys(options).length === 0) {
       throw {
          status: StatusCodes.UNPROCESSABLE_ENTITY,
          message: messages.invalidFields,
       };
    }
-
-   const userWithId = await usersRepository.getById(id);
+   
+   const userWithId = await usersRepository.getById(callingUser.id);
 
    if (!userWithId) {
       throw {

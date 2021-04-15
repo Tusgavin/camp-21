@@ -24,15 +24,9 @@ module.exports = {
 
   edit: async (req, res) => {
     try {
-      // Checa se name é passado nos parametros
-      const { id } = req.query;
-      if (id === undefined) {
-        return res.status(StatusCodes.UNPROCESSABLE_ENTITY).json(messages.missingParams);
-      }
-
       const { name, email, password } = req.body;
 
-      const response = await usersService.edit(id, { name, email, password });
+      const response = await usersService.edit({ name, email, password }, req.user);
 
       if (!response) {
         return res.status(StatusCodes.NO_CONTENT).end();
@@ -43,4 +37,12 @@ module.exports = {
       return res.status(error.status || StatusCodes.INTERNAL_SERVER_ERROR).json(error.message)
     }
   },
+
+  delete: async (req, res) => {
+    try {
+
+    } catch (error) {
+      return res.status(error.status || StatusCodes.INTERNAL_SERVER_ERROR).json(error.message)
+    }
+  }
 };
