@@ -8,4 +8,6 @@ router.get("/", usersController.list);
 router.patch("/edit", usersController.edit);
 router.delete("/delete", usersController.delete);
 
+router.get("/film", usersController.listFilms);
+
 module.exports.users = router;
